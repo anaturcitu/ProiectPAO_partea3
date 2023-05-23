@@ -1,6 +1,6 @@
 package biblioteca;
 
-import csv.ServiciuAudit;
+import csv_bd.ServiciuAudit;
 import exceptii.IdInexistentExceptie;
 import exceptii.IdInvalidExceptie;
 import exceptii.TitluInexistentExceptie;
@@ -23,7 +23,7 @@ public class Biblioteca implements BibliotecaService {
 
     @Override
     public void citireCarti() { // citeste cartile din fisier CSV(toate cartile cu un anumit titlu, cu toate id-urile), diferita de cea din clasa CitireCarte(citeste o singura carte)
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Ana\\Desktop\\proiectPAO_partea2\\src\\csv\\carteCSVcitire.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Ana\\Desktop\\proiectPAO_partea2\\src\\csv_bd\\carteCSVcitire.csv"))) {
             int i = 0;
             String line;
             while ((line = reader.readLine()) != null) {
@@ -61,7 +61,7 @@ public class Biblioteca implements BibliotecaService {
             if (crt == null)
                 break;
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Ana\\Desktop\\proiectPAO_partea2\\src\\csv\\carteCSVafisare.csv", true))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Ana\\Desktop\\proiectPAO_partea2\\src\\csv_bd\\carteCSVafisare.csv", true))) {
                 String line = crt.getTitlu() + ", " + crt.getAutor() + ", " + crt.getEditura() + ", " + crt.getGenLiterar() + ", " + crt.getNumarPagini() + ", " + crt.getAnAparitie();
 
 
@@ -81,7 +81,7 @@ public class Biblioteca implements BibliotecaService {
                 ServiciuAudit.logAudit("Cartea a fost citita si afisata.");
             }
             catch (IOException e) {
-                System.out.println("eroare la scrierea produsului in CSV: " + e.getMessage());
+                System.out.println("eroare la scrierea cartii in CSV: " + e.getMessage());
             }
 
         }

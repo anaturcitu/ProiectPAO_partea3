@@ -1,6 +1,7 @@
 import biblioteca.*;
-import csv.BibliotecarCSVCitire;
-import csv.CarteCSV;
+import csv_bd.BibliotecarCSVCitire;
+import csv_bd.CarteCSV;
+import csv_bd.FisaBibliotecaCarteCSV;
 import exceptii.OptiuneGresitaExceptie;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class Main {
         System.out.println("2. Afisarea tuturor utilizatorilor.");
         System.out.println("3. Adaugarea unei noi carti in biblioteca.");
         System.out.println("4. Imprumutarea unei carti de catre un utilizator.");
-        System.out.println("5. Creaza si afiseaza fisa cartii citita de la tastatura.");
-        System.out.println("6. Creaza si afiseaza fisa utilizatorului citit de la tastatura.");
+        System.out.println("5. Afiseaza cartile din baza de date, se introduce numarul cartii de latastatura, se introduce in bd si afiseaza fisa cartii din baza de date.");
+        System.out.println("6. Creaza si afiseaza fisa utilizatorului citit de la tastatura. O introduce in baza de date si o afiseaza pe ecran.");
         System.out.println("7. Verifica daca un bibliotecar citit de la tastatura lucreaza intr-o anumita zi.");
         System.out.println("8. Citest un bibliotecar sef de la tastatura si il afiseaza.");
         System.out.println("9. Iesirea din aplicatie. ");
@@ -58,11 +59,15 @@ public class Main {
                         break;
                     case 5:
                         CarteCSV carteCSV = CarteCSV.getInstance();
-                        List<ExemplarCarte> carte = carteCSV.citesteCartiDinCSV();
+                        List<ExemplarCarte> carte = carteCSV.citesteCartiDinBD();
                         System.out.print("Numarul cartii: ");
                         int numarCarte = scanner.nextInt();
 
                         FisaBibliotecaCarte fisaBibliotecaCarte = new FisaBibliotecaCarte(carte.get(0), numarCarte);
+                        FisaBibliotecaCarteCSV fisaBibliotecaCarteCSV = FisaBibliotecaCarteCSV.getInstance();
+                        fisaBibliotecaCarteCSV.scrieFisaBibliotecaCarteInBD(carte.get(0), numarCarte);
+//                        fisaBibliotecaCarteCSV.scrieFisaBibliotecaCarteInBD
+
                         fisaBibliotecaCarte.afiseazaFisa();
                         System.out.print("Alege alta optiune: ");
                         optiune = scanner.nextInt();
@@ -75,7 +80,7 @@ public class Main {
                         System.out.print("Telefonul utilizatorului: ");
                         String telefonUtilizator = scanner.next();
                         FisaImprumutUtilizator fisaImprumutUtilizator = new FisaImprumutUtilizator(utilizatorBiblioteca1, telefonUtilizator, numarUtilizator);
-                        fisaImprumutUtilizator.afiseazaFisa();
+                        fisaImprumutUtilizator.introduceAfiseazaFisaBD();
                         System.out.print("Alege alta optiune: ");
                         optiune = scanner.nextInt();
                         break;

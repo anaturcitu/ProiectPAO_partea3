@@ -1,8 +1,12 @@
 package biblioteca;
 
-import csv.FisaBibliotecaCarteCSV;
-import exceptii.IdInvalidExceptie;
+import csv_bd.ServiciuAudit;
 import service.Validare;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class FisaBibliotecaCarte implements Validare {
     ExemplarCarte fisa;
@@ -18,14 +22,49 @@ public class FisaBibliotecaCarte implements Validare {
     }
 
     public void afiseazaFisa() {
+//        try {
+//            if (validare(numarCarte)) {
+//                FisaBibliotecaCarteCSV fisaBibliotecaCarteCSV = FisaBibliotecaCarteCSV.getInstance();
+//                fisaBibliotecaCarteCSV.scrieFisaBibliotecaCarteInCSV(fisa, numarCarte);
+//            }
+//            else throw new IdInvalidExceptie("Numarul cartii este invalid.");
+//        } catch (IdInvalidExceptie exceptie) {
+//            System.out.println(exceptie.getMessage());
+//        }
+
+
+
+        // AFISEAZA FISA DIN BAZA DE DATE:
         try {
-            if (validare(numarCarte)) {
-                FisaBibliotecaCarteCSV fisaBibliotecaCarteCSV = FisaBibliotecaCarteCSV.getInstance();
-                fisaBibliotecaCarteCSV.scrieFisaBibliotecaCarteInCSV(fisa, numarCarte);
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/proiectpao1", "root", "123456");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from fisa_biblioteca_carte");
+
+            while (resultSet.next()) {
+                String titlu = resultSet.getString("titlu");
+                String autor = resultSet.getString("autor");
+                String editura = resultSet.getString("editura");
+                String genLiterar = resultSet.getString("genLiterar");
+                int nrPagini = resultSet.getInt("numarPagini");
+                int anAparitie = resultSet.getInt("anAparitie");
+                int idCarte = resultSet.getInt("idCarte");
+                System.out.println(resultSet.getString("titlu"));
+                System.out.println(resultSet.getString("autor"));
+                System.out.println(resultSet.getString("editura"));
+                System.out.println(resultSet.getString("genLiterar"));
+                System.out.println(resultSet.getInt("numarPagini"));
+                System.out.println(resultSet.getInt("anAparitie"));
+                System.out.println(resultSet.getInt("idCarte"));
+                System.out.println(resultSet.getInt("numarCarte"));
+
+                ServiciuAudit.logAudit("Fisa cartii din baza de date a fsot citita si afisata.");
+
+//                ExemplarCarte exemplarCarte = new ExemplarCarte(titlu, autor, editura, genLiterar, nrPagini, anAparitie, idCarte);
             }
-            else throw new IdInvalidExceptie("Numarul cartii este invalid.");
-        } catch (IdInvalidExceptie exceptie) {
-            System.out.println(exceptie.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     @Override
